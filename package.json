@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "bun --watch src/index.ts",
-    "build": "bun build src/index.ts --outdir dist",
+    "build": "bun build src/index.ts --outdir dist --target=bun",
     "start": "bun run dist/index.js",
     "db:push": "drizzle-kit push",
     "db:pull": "drizzle-kit pull",

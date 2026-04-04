@@ -5,4 +5,5 @@ import * as schema from "../db/schema";
 const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle({ client: sql, schema });
 
-export default db;
+export type Db = typeof db;
+export { db };

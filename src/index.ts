@@ -1,23 +1,31 @@
 import { serve } from "bun";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { createContext } from "./context";
-import { router } from "./trpc";
-import { fileRouter } from "./routers/file";
-import { folderRouter } from "./routers/folder";
 import { buildCorsHeaders, withCors } from "./utils/cors";
-
-const appRouter = router({
-  file: fileRouter,
-  folder: folderRouter,
-});
-export type AppRouter = typeof appRouter;
+import appRouter from "./routers/router";
 
 serve({
   port: 3000,
   async fetch(req) {
+    const url = new URL(req.url);
     const corsHeaders = buildCorsHeaders(req);
     if (req.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders });
+    }
+
+    if (req.method === "GET" && url.pathname === "/") {
+      return withCors(
+        req,
+        new Response(
+          JSON.stringify({
+            message: "Welcome to the ASET Backend built on Trpc",
+          }),
+          {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          },
+        ),
+      );
     }
 
     const res = await fetchRequestHandler({
