@@ -77,4 +77,4 @@ prisma/
 - Do not add packages without being asked. Especially no ORMs, loggers, or utility libs.
 - Do not create abstractions "for future use" — no base classes, no generic CRUD factories.
 - Do not nest logic deeper than 2 levels. Early-return instead.
-- Do not duplicate Clerk profile data in the DB beyond what's needed for queries/joins (currently: `clerkId`, `email`, `name`).
+- `User.id` is the Clerk user id string (`ctx.auth.userId`). Do not add a separate `clerkId` column.
