@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm --filter elitedrive build",
+  "buildCommand": "pnpm --filter aset-backend exec prisma generate && pnpm --filter elitedrive build",
   "outputDirectory": "Aset-Frontend/dist",
   "installCommand": "pnpm install --frozen-lockfile",
   "framework": null
