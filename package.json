@@ -2,14 +2,20 @@
   "name": "aset-monorepo",
   "private": true,
   "scripts": {
-    "dev:frontend": "pnpm --filter aset-frontend dev",
-    "dev:backend": "pnpm --filter aset-backend dev",
+    "dev:frontend": "cd apps/frontend && pnpm dev",
+    "dev:backend": "cd apps/backend && pnpm dev",
     "build:frontend": "pnpm --filter aset-frontend build",
-    "build:vercel": "pnpm --filter aset-backend exec prisma generate && pnpm --filter aset-frontend build ",
-    "lint": "pnpm -r lint"
+    "build:vercel": "pnpm --filter aset-backend exec prisma generate && pnpm --filter aset-frontend build",
+    "format": "pnpm -r format",
+    "lint": "pnpm -r lint",
+    "prepare": "husky"
   },
   "engines": {
     "node": ">=20",
     "pnpm": ">=9"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "prettier": "^3.8.2"
   }
 }
