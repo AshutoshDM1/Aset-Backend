@@ -1,6 +1,5 @@
 packages:
-  - 'Aset-Frontend'
-  - 'Aset-Backend'
+  - 'apps/*'
   - 'packages/*'
 allowBuilds:
   '@clerk/shared': true

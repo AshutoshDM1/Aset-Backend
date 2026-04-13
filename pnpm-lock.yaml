@@ -8,7 +8,7 @@ importers:
 
   .: {}
 
-  Aset-Backend:
+  apps/backend:
     dependencies:
       '@aws-sdk/client-s3':
         specifier: ^3.1029.0
@@ -78,7 +78,7 @@ importers:
         specifier: ^8.58.0
         version: 8.58.1(eslint@10.2.0(jiti@2.6.1))(typescript@5.9.3)
 
-  Aset-Frontend:
+  apps/frontend:
     dependencies:
       '@clerk/react':
         specifier: ^6.1.4
@@ -170,7 +170,7 @@ importers:
     devDependencies:
       '@aset/api':
         specifier: workspace:*
-        version: link:../packages/api
+        version: link:../../packages/api
       '@eslint/js':
         specifier: ^9.39.4
         version: 9.39.4

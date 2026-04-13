@@ -1,1 +1,1 @@
-export type { AppRouter } from '../../Aset-Backend/src/routers/router';
+export type { AppRouter } from '../../apps/backend/src/routers/router';

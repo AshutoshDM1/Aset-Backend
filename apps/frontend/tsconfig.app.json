@@ -26,7 +26,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@aset/api": ["../packages/api/index.ts"]
+      "@aset/api": ["../../packages/api/index.ts"]
     }
   },
   "include": ["src"]
