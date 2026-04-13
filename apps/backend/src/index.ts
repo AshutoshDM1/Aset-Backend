@@ -5,10 +5,7 @@ import { createContext } from './context';
 import { buildCorsHeaders, withCors } from './utils/cors';
 import appRouter from './routers/router';
 
-function logTrpcError(opts: {
-  error: TRPCError;
-  path: string | undefined;
-}) {
+function logTrpcError(opts: { error: TRPCError; path: string | undefined }) {
   const { error, path } = opts;
   const c = error.cause as
     | { code?: string; meta?: unknown; message?: string }
@@ -23,11 +20,7 @@ function logTrpcError(opts: {
     });
     return;
   }
-  if (
-    code === 'ETIMEDOUT' ||
-    code === 'ECONNREFUSED' ||
-    code === 'ENOTFOUND'
-  ) {
+  if (code === 'ETIMEDOUT' || code === 'ECONNREFUSED' || code === 'ENOTFOUND') {
     console.error('[Prisma/DB network]', {
       path,
       code,
