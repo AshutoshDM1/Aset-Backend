@@ -10,8 +10,10 @@
     "moduleResolution": "bundler",
     "target": "ES2023",
     "strict": true,
+    "skipLibCheck": true,
     "esModuleInterop": true,
     "types": ["node"]
   },
-  "include": ["src", "*.ts"]
+  "include": ["src", "*.ts"],
+  "exclude": ["node_modules", "dist"]
 }

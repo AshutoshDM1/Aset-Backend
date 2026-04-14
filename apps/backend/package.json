@@ -7,7 +7,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "prisma generate && tsc",
+    "gen": "pnpm dlx prisma generate",
+    "push": "pnpm dlx prisma db push",
+    "pull": "pnpm dlx prisma db pull",
+    "studio": "pnpm dlx prisma studio",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },
@@ -16,6 +20,9 @@
   "license": "ISC",
   "packageManager": "pnpm@10.33.0",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1030.0",
+    "@aws-sdk/s3-request-presigner": "^3.1030.0",
+    "@clerk/backend": "^3.2.9",
     "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^7.7.0",
     "@trpc/server": "^11.16.0",
@@ -34,6 +41,7 @@
     "@types/pg": "^8.20.0",
     "eslint": "^9.39.4",
     "globals": "^17.5.0",
+    "prettier": "^3.8.2",
     "prisma": "^7.7.0",
     "tsx": "^4.21.0",
     "typescript": "~5.9.3",
