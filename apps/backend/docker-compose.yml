@@ -8,5 +8,5 @@ services:
     container_name: aset-backend
     env_file: .env
     ports:
-      - "${PORT:-5000}:${PORT:-5000}"
+      - '${PORT:-5000}:${PORT:-5000}'
     restart: unless-stopped

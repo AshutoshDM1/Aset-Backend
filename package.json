@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "pnpm -r dev",
+    "dev": "pnpm --parallel -r dev",
     "dev:frontend": "pnpm --filter aset-frontend dev",
     "dev:backend": "pnpm --filter aset-backend dev",
     "build": "pnpm -r build",
