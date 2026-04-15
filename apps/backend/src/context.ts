@@ -2,8 +2,8 @@ import type { Request } from 'express';
 import { verifyAuth } from './middleware/clerk-auth';
 import { db } from './utils/db';
 
-export function createContext({ req }: { req: Request }) {
-  const auth = verifyAuth(req);
+export async function createContext({ req }: { req: Request }) {
+  const auth = await verifyAuth(req);
   return { db, auth };
 }
 
