@@ -1,4 +1,5 @@
 import { createExpressMiddleware } from '@trpc/server/adapters/express';
+import { clerkMiddleware } from '@clerk/express';
 import express from 'express';
 import cors from 'cors';
 import { appRouter } from './appRouter';
@@ -16,10 +17,16 @@ app.use(
 );
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Hello World' });
+  res
+    .status(200)
+    .json({ status: 'success', message: 'Welcome to the Aset API' });
 });
 
-app.use('/trpc', createExpressMiddleware({ router: appRouter, createContext }));
+app.use(
+  '/trpc',
+  clerkMiddleware(),
+  createExpressMiddleware({ router: appRouter, createContext }),
+);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port http://localhost:${PORT}`);
