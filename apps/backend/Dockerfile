@@ -1,36 +1,42 @@
-# syntax=docker/dockerfile:1
+# syntax=docker/dockerfile:1.7
 
-FROM oven/bun:1 AS build
-WORKDIR /app
+# Build context = repo root (see apps/backend/docker-compose.yml)
 
-COPY package.json bun.lock ./
-# Skip prepare (husky); Git hooks are not used inside the image
-RUN bun install --frozen-lockfile --ignore-scripts
+# ---------- Base: pnpm via corepack ----------
+FROM node:20-slim AS base
+ENV PNPM_HOME="/pnpm" \
+    PATH="/pnpm:$PATH" \
+    CI=true
+RUN corepack enable
+WORKDIR /repo
 
-COPY prisma ./prisma
-COPY prisma.config.ts ./
-COPY tsconfig.json ./
-COPY src ./src
+# ---------- Install workspace deps (cached on manifests) ----------
+FROM base AS deps
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/backend/package.json apps/backend/
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    pnpm install --frozen-lockfile --filter aset-backend...
 
-# prisma generate does not need a real database
-ENV DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:5432/postgres"
-RUN bunx prisma generate
+# ---------- Build: prisma generate + esbuild bundle ----------
+FROM deps AS build
+COPY apps/backend apps/backend
+RUN pnpm --filter aset-backend build
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    pnpm --filter aset-backend --prod --legacy deploy /prod
 
-RUN bun run build
-
-FROM oven/bun:1 AS runner
-WORKDIR /app
-
+# ---------- Runtime: slim image, prod deps only ----------
+FROM node:20-slim AS runtime
 ENV NODE_ENV=production
+WORKDIR /app
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends openssl ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
 
-COPY package.json bun.lock ./
-RUN bun install --frozen-lockfile --production --ignore-scripts
+COPY --from=build /prod/node_modules ./node_modules
+COPY --from=build /repo/apps/backend/dist ./dist
+COPY --from=build /repo/apps/backend/prisma ./prisma
+COPY --from=build /repo/apps/backend/package.json ./package.json
 
-COPY --from=build /app/dist ./dist
-COPY --from=build /app/prisma ./prisma
-COPY prisma.config.ts ./
-COPY --from=build /app/src/generated/prisma ./src/generated/prisma
-
+USER node
 EXPOSE 5000
-
-CMD ["bun", "run", "dist/index.js"]
+CMD ["node", "dist/index.js"]
