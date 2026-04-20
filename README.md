@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://aset.elitedev.space/favicon.svg" height="50" width="50" />
+<img src="https://aset.elitedev.space/favicon.svg" width="60" />
 
 # Aset
 
@@ -34,6 +34,8 @@ Securely upload, organize, share, and access your files from anywhere — built 
 - **Monorepo Architecture** — Clean separation between `frontend`, `backend`, and shared `api` types.
 
 ## Tech Stack
+
+<img src="https://res.cloudinary.com/dnvl8mqba/image/upload/v1776704945/Aset/Aset-LLD_l597xy.png" width="1000" alt="lld" />
 
 ### Frontend (`apps/frontend`)
 
