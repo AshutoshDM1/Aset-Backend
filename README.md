@@ -1,6 +1,7 @@
 <div align="center">
 
 <img src="https://aset.elitedev.space/favicon.svg" height="50" width="50" />
+
 # Aset
 
 **A modern, cloud-native file storage & management platform.**

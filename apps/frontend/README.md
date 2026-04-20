@@ -24,6 +24,7 @@ Securely upload, organize, share, and access your files from anywhere — built 
 **Aset** is a full-stack, Google Drive–style file management application. It provides a clean, dashboard-based experience for managing personal files and folders with support for sharing, starring, trash, and more — backed by cloud object storage and a type-safe API layer.
 
 ## Features
+
 - **Secure Authentication** — Powered by [Clerk](https://clerk.com/) with protected dashboard routes.
 - **File & Folder Management** — Create, browse, rename, move, and delete files and nested folders.
 - **Cloud Storage** — Files stored in [Cloudflare R2](https://www.cloudflare.com/developer-platform/r2/) via presigned URLs.
@@ -35,7 +36,6 @@ Securely upload, organize, share, and access your files from anywhere — built 
 ## Tech Stack
 
 <img src="https://res.cloudinary.com/dnvl8mqba/image/upload/v1776704945/Aset/Aset-LLD_l597xy.png" width="1000" alt="lld" />
-
 
 ### Frontend (`apps/frontend`)
 
@@ -158,24 +158,24 @@ pnpm dev:backend
 
 ## Available Scripts
 
-| Script                    | Description                                         |
-| ------------------------- | --------------------------------------------------- |
-| `pnpm dev`                | Run frontend and backend in parallel                |
-| `pnpm dev:frontend`       | Run the Vite dev server only                        |
-| `pnpm dev:backend`        | Run the Express API with hot reload                 |
-| `pnpm build`              | Build all workspace packages                        |
-| `pnpm build:vercel`       | Build tailored for Vercel deployment                |
-| `pnpm lint` / `lint:fix`  | Lint the entire monorepo                            |
-| `pnpm format`             | Format all files with Prettier                      |
+| Script                   | Description                          |
+| ------------------------ | ------------------------------------ |
+| `pnpm dev`               | Run frontend and backend in parallel |
+| `pnpm dev:frontend`      | Run the Vite dev server only         |
+| `pnpm dev:backend`       | Run the Express API with hot reload  |
+| `pnpm build`             | Build all workspace packages         |
+| `pnpm build:vercel`      | Build tailored for Vercel deployment |
+| `pnpm lint` / `lint:fix` | Lint the entire monorepo             |
+| `pnpm format`            | Format all files with Prettier       |
 
 ### Backend-specific
 
-| Script                                    | Description                   |
-| ----------------------------------------- | ----------------------------- |
-| `pnpm --filter aset-backend studio`       | Open Prisma Studio            |
-| `pnpm --filter aset-backend push`         | Push schema to database       |
-| `pnpm --filter aset-backend pull`         | Pull schema from database     |
-| `pnpm --filter aset-backend typecheck`    | Run TypeScript type checking  |
+| Script                                 | Description                  |
+| -------------------------------------- | ---------------------------- |
+| `pnpm --filter aset-backend studio`    | Open Prisma Studio           |
+| `pnpm --filter aset-backend push`      | Push schema to database      |
+| `pnpm --filter aset-backend pull`      | Pull schema from database    |
+| `pnpm --filter aset-backend typecheck` | Run TypeScript type checking |
 
 ## Deployment
 
