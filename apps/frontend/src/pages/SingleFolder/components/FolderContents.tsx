@@ -1,9 +1,13 @@
 import { useState } from 'react';
 import { useQueries } from '@tanstack/react-query';
-import { Link } from 'react-router';
-import { FileIcon, Folder } from 'lucide-react';
+import { FileIcon } from 'lucide-react';
 import { trpc } from '@/utils/trpc';
+import FolderComponent, {
+  type FolderColor,
+} from '@/shared/FolderComponent/FolderComponent';
 import { ImagePreviewDialog } from './ImagePreviewDialog';
+
+const COLOR_CYCLE: FolderColor[] = ['cyan', 'yellow', 'pink', 'black'];
 
 const IMAGE_NAME = /\.(jpe?g|png|gif|webp|avif|svg|bmp|ico)$/i;
 
@@ -31,9 +35,12 @@ export function FolderContents({ folderId }: FolderContentsProps) {
 
   if (loading) {
     return (
-      <ul className="flex flex-col gap-2" aria-busy="true">
-        {[1, 2, 3].map((i) => (
-          <li key={i} className="h-12 animate-pulse rounded-2xl bg-muted/60" />
+      <ul
+        className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+        aria-busy="true"
+      >
+        {[1, 2, 3, 4].map((i) => (
+          <li key={i} className="h-40 animate-pulse rounded-2xl bg-muted/60" />
         ))}
       </ul>
     );
@@ -71,56 +78,61 @@ export function FolderContents({ folderId }: FolderContentsProps) {
 
   return (
     <>
-      <ul className="flex flex-col gap-2">
-        {folders.map((item) => (
-          <li key={`f-${item.id}`}>
-            <Link
-              to={`/dashboard/folder/${item.id}`}
-              className="flex items-center gap-3 rounded-lg border border-border bg-card px-4 py-3 transition-colors hover:bg-muted/40"
-            >
-              <Folder
-                className="size-5 shrink-0 text-muted-foreground"
-                aria-hidden
+      {folders.length > 0 ? (
+        <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-9">
+          {folders.map((item, index) => (
+            <li key={`f-${item.id}`}>
+              <FolderComponent
+                folderId={item.id}
+                folderName={item.name}
+                color={COLOR_CYCLE[index % COLOR_CYCLE.length]}
               />
-              <span className="min-w-0 truncate font-medium">{item.name}</span>
-            </Link>
-          </li>
-        ))}
-        {files.map((item) => {
-          const showPreview = isImageFileName(item.name);
-          const rowClass =
-            'flex w-full items-center gap-3 rounded-lg border border-border bg-card px-4 py-3 text-left';
-          return (
-            <li key={`file-${item.id}`}>
-              {showPreview ? (
-                <button
-                  type="button"
-                  className={`${rowClass} cursor-pointer transition-colors hover:bg-muted/40`}
-                  onClick={() => setPreview({ name: item.name, url: item.url })}
-                >
-                  <FileIcon
-                    className="size-5 shrink-0 text-muted-foreground"
-                    aria-hidden
-                  />
-                  <span className="min-w-0 truncate font-medium">
-                    {item.name}
-                  </span>
-                </button>
-              ) : (
-                <div className={rowClass}>
-                  <FileIcon
-                    className="size-5 shrink-0 text-muted-foreground"
-                    aria-hidden
-                  />
-                  <span className="min-w-0 truncate font-medium">
-                    {item.name}
-                  </span>
-                </div>
-              )}
             </li>
-          );
-        })}
-      </ul>
+          ))}
+        </ul>
+      ) : null}
+      {files.length > 0 ? (
+        <ul
+          className={`flex flex-col gap-2 ${folders.length > 0 ? 'mt-6' : ''}`}
+        >
+          {files.map((item) => {
+            const showPreview = isImageFileName(item.name);
+            const rowClass =
+              'flex w-full items-center gap-3 rounded-lg border border-border bg-card px-4 py-3 text-left';
+            return (
+              <li key={`file-${item.id}`}>
+                {showPreview ? (
+                  <button
+                    type="button"
+                    className={`${rowClass} cursor-pointer transition-colors hover:bg-muted/40`}
+                    onClick={() =>
+                      setPreview({ name: item.name, url: item.url })
+                    }
+                  >
+                    <FileIcon
+                      className="size-5 shrink-0 text-muted-foreground"
+                      aria-hidden
+                    />
+                    <span className="min-w-0 truncate font-medium">
+                      {item.name}
+                    </span>
+                  </button>
+                ) : (
+                  <div className={rowClass}>
+                    <FileIcon
+                      className="size-5 shrink-0 text-muted-foreground"
+                      aria-hidden
+                    />
+                    <span className="min-w-0 truncate font-medium">
+                      {item.name}
+                    </span>
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      ) : null}
       <ImagePreviewDialog
         open={!!preview}
         onOpenChange={(next) => {

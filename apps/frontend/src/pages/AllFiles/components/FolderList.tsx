@@ -1,12 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router';
-import { Folder } from 'lucide-react';
 import { trpc } from '@/utils/trpc';
+import FolderComponent, {
+  type FolderColor,
+} from '@/shared/FolderComponent/FolderComponent';
 
 type FolderListProps = {
   /** Omit for drive root. Set to list children of a folder. */
   parentFolderId?: number;
 };
+
+const COLOR_CYCLE: FolderColor[] = ['cyan', 'yellow', 'pink', 'black'];
 
 export function FolderList({ parentFolderId }: FolderListProps) {
   const listQuery =
@@ -24,9 +27,12 @@ export function FolderList({ parentFolderId }: FolderListProps) {
 
   if (isLoading) {
     return (
-      <ul className="flex flex-col gap-2" aria-busy="true">
-        {[1, 2, 3].map((i) => (
-          <li key={i} className="h-12 animate-pulse rounded-2xl bg-muted/60" />
+      <ul
+        className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+        aria-busy="true"
+      >
+        {[1, 2, 3, 4].map((i) => (
+          <li key={i} className="h-40 animate-pulse rounded-2xl bg-muted/60" />
         ))}
       </ul>
     );
@@ -56,21 +62,14 @@ export function FolderList({ parentFolderId }: FolderListProps) {
   }
 
   return (
-    <ul className="flex flex-col gap-2">
-      {folders.map((folder) => (
+    <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-9">
+      {folders.map((folder, index) => (
         <li key={folder.id}>
-          <Link
-            to={`/dashboard/folder/${folder.id}`}
-            className="flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3 transition-colors hover:bg-muted/40"
-          >
-            <Folder
-              className="size-5 shrink-0 text-muted-foreground"
-              aria-hidden
-            />
-            <div className="min-w-0 flex-1">
-              <p className="truncate font-medium">{folder.name}</p>
-            </div>
-          </Link>
+          <FolderComponent
+            folderId={folder.id}
+            folderName={folder.name}
+            color={COLOR_CYCLE[index % COLOR_CYCLE.length]}
+          />
         </li>
       ))}
     </ul>
