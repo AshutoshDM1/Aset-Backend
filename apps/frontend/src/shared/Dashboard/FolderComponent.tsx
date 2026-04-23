@@ -26,7 +26,7 @@ const FolderComponent = ({
   to,
   className,
 }: FolderComponentProps) => {
-  const href = to ?? `/dashboard/folder/${folderId}`;
+  const href = to ?? `/dashboard/my-files/${folderId}`;
 
   return (
     <Link

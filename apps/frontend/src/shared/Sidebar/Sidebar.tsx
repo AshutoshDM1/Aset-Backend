@@ -20,7 +20,7 @@ type SidebarItem = {
 };
 
 const SIDEBAR_ITEMS: SidebarItem[] = [
-  { label: 'All Files', href: '/dashboard', icon: Folder },
+  { label: 'My Files', href: '/dashboard/my-files', icon: Folder },
   { label: 'Shared with me', href: '/dashboard/shared', icon: Users },
   { label: 'Recent', href: '/dashboard/recent', icon: Clock3 },
   { label: 'Starred', href: '/dashboard/starred', icon: Star },
@@ -42,8 +42,8 @@ function SidebarNavItem({ item }: { item: SidebarItem }) {
         className={cn(
           'w-full transition-all duration-300',
           isActive
-            ? 'bg-primary text-primary-foreground '
-            : 'bg-transparent text-muted-foreground hover:text-foreground hover:bg-muted ',
+            ? 'bg-muted hover:bg-muted/60 text-foreground '
+            : 'bg-transparent text-muted-foreground hover:text-foreground hover:bg-muted/60 ',
         )}
       >
         <div className="flex items-center justify-start gap-2">

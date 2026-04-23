@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { trpc } from '@/utils/trpc';
 import FolderComponent, {
   type FolderColor,
-} from '@/shared/FolderComponent/FolderComponent';
+} from '@/shared/Dashboard/FolderComponent';
 
 type FolderListProps = {
   /** Omit for drive root. Set to list children of a folder. */

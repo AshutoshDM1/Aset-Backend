@@ -3,7 +3,7 @@ import { FileIcon } from 'lucide-react';
 import { trpc } from '@/utils/trpc';
 import FolderComponent, {
   type FolderColor,
-} from '@/shared/FolderComponent/FolderComponent';
+} from '@/shared/Dashboard/FolderComponent';
 import ImageFilePreview from './ImageFilePreview';
 
 const COLOR_CYCLE: FolderColor[] = ['cyan', 'yellow', 'pink', 'black'];
