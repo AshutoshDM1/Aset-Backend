@@ -3,6 +3,7 @@ import { trpc } from '@/utils/trpc';
 import FolderComponent, {
   type FolderColor,
 } from '@/shared/Dashboard/FolderComponent';
+import Loader from '../../shared/PageLoader/Loader';
 
 type FolderListProps = {
   /** Omit for drive root. Set to list children of a folder. */
@@ -27,14 +28,9 @@ export function FolderList({ parentFolderId }: FolderListProps) {
 
   if (isLoading) {
     return (
-      <ul
-        className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
-        aria-busy="true"
-      >
-        {[1, 2, 3, 4].map((i) => (
-          <li key={i} className="h-40 animate-pulse rounded-2xl bg-muted/60" />
-        ))}
-      </ul>
+      <div className="py-10">
+        <Loader />
+      </div>
     );
   }
 

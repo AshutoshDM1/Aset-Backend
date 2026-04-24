@@ -82,13 +82,13 @@ export type UploadsPoint = {
 };
 
 export const uploadsMock: UploadsPoint[] = [
-  { date: 'Mon', uploads: 14, downloads: 8 },
-  { date: 'Tue', uploads: 22, downloads: 12 },
-  { date: 'Wed', uploads: 18, downloads: 15 },
-  { date: 'Thu', uploads: 31, downloads: 19 },
-  { date: 'Fri', uploads: 27, downloads: 22 },
-  { date: 'Sat', uploads: 12, downloads: 7 },
-  { date: 'Sun', uploads: 9, downloads: 5 },
+  { date: 'Mon', uploads: 8, downloads: 14 },
+  { date: 'Tue', uploads: 12, downloads: 22 },
+  { date: 'Wed', uploads: 15, downloads: 18 },
+  { date: 'Thu', uploads: 19, downloads: 25 },
+  { date: 'Fri', uploads: 12, downloads: 27 },
+  { date: 'Sat', uploads: 17, downloads: 21 },
+  { date: 'Sun', uploads: 10, downloads: 20 },
 ];
 
 export type FileTypePoint = {
@@ -103,6 +103,9 @@ export const fileTypesMock: FileTypePoint[] = [
   { type: 'Audio', count: 98 },
   { type: 'PDFs', count: 212 },
   { type: 'Other', count: 142 },
+  { type: 'JPSs', count: 212 },
+  { type: 'Excel', count: 22 },
+  { type: 'zips', count: 102 },
 ];
 
 export type ActivityItem = {

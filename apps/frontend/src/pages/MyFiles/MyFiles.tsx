@@ -1,5 +1,5 @@
 import DashboardHeader from '@/shared/Dashboard/DashboardHeader';
-import { FolderList } from '../../shared/Dashboard/FolderList';
+import { FolderList } from './FolderList';
 
 export default function MyFiles() {
   return (

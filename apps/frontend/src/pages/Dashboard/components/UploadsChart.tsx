@@ -73,20 +73,18 @@ export function UploadsChart() {
             content={<ChartTooltipContent indicator="dot" />}
           />
           <Area
-            dataKey="uploads"
-            type="monotone"
-            stroke="var(--color-uploads)"
-            fill="url(#fillUploads)"
-            strokeWidth={2}
-            stackId="a"
-          />
-          <Area
             dataKey="downloads"
             type="monotone"
             stroke="var(--color-downloads)"
             fill="url(#fillDownloads)"
             strokeWidth={2}
-            stackId="a"
+          />
+          <Area
+            dataKey="uploads"
+            type="monotone"
+            stroke="var(--color-uploads)"
+            fill="url(#fillUploads)"
+            strokeWidth={2}
           />
           <ChartLegend content={<ChartLegendContent />} />
         </AreaChart>

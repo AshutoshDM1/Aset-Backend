@@ -42,11 +42,7 @@ export function FileTypeBreakdown() {
             cursor={false}
             content={<ChartTooltipContent hideLabel />}
           />
-          <Bar
-            dataKey="count"
-            fill="var(--color-count)"
-            radius={[6, 6, 0, 0]}
-          />
+          <Bar dataKey="count" fill="var(--chart-2)" radius={[6, 6, 0, 0]} />
         </BarChart>
       </ChartContainer>
     </div>

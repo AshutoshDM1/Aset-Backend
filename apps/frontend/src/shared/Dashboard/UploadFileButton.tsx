@@ -22,7 +22,7 @@ export function UploadFileButton({
   async function onPick(e: React.ChangeEvent<HTMLInputElement>) {
     const picked = e.target.files?.[0];
     if (!picked || !canUpload) return;
-
+    toast.loading('Uploading file...');
     setBusy(true);
     try {
       const signed = await presign.mutateAsync({
@@ -60,6 +60,7 @@ export function UploadFileButton({
     } finally {
       setBusy(false);
       if (inputRef.current) inputRef.current.value = '';
+      toast.dismiss();
     }
   }
 

@@ -1,6 +1,4 @@
-import { useQueries } from '@tanstack/react-query';
 import { FileIcon } from 'lucide-react';
-import { trpc } from '@/utils/trpc';
 import FolderComponent, {
   type FolderColor,
 } from '@/shared/Dashboard/FolderComponent';
@@ -14,55 +12,16 @@ function isImageFileName(name: string) {
   return IMAGE_NAME.test(name);
 }
 
+type FolderItem = { id: number; name: string };
+type FileItem = { id: number; name: string; url: string };
+
 type FolderContentsProps = {
-  folderId: number;
+  folders: FolderItem[];
+  files: FileItem[];
+  onRefetch?: () => void;
 };
 
-export function FolderContents({ folderId }: FolderContentsProps) {
-  const [foldersQuery, filesQuery] = useQueries({
-    queries: [
-      trpc.folder.list.queryOptions({ parentId: folderId }),
-      trpc.file.listByFolder.queryOptions({ folderId }),
-    ],
-  });
-
-  const loading = foldersQuery.isPending || filesQuery.isPending;
-
-  if (loading) {
-    return (
-      <ul
-        className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
-        aria-busy="true"
-      >
-        {[1, 2, 3, 4].map((i) => (
-          <li key={i} className="h-40 animate-pulse rounded-2xl bg-muted/60" />
-        ))}
-      </ul>
-    );
-  }
-
-  if (foldersQuery.isError || filesQuery.isError) {
-    const err = foldersQuery.error ?? filesQuery.error;
-    return (
-      <div className="rounded-2xl border border-border bg-card p-4 text-sm text-destructive">
-        {err?.message ?? 'Something went wrong'}
-        <button
-          type="button"
-          className="mt-2 text-primary underline underline-offset-2"
-          onClick={() => {
-            void foldersQuery.refetch();
-            void filesQuery.refetch();
-          }}
-        >
-          Try again
-        </button>
-      </div>
-    );
-  }
-
-  const folders = foldersQuery.data ?? [];
-  const files = filesQuery.data ?? [];
-
+export function FolderContents({ folders, files }: FolderContentsProps) {
   const imageFiles = files.filter((f) => isImageFileName(f.name));
   const otherFiles = files.filter((f) => !isImageFileName(f.name));
 

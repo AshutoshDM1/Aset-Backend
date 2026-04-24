@@ -70,6 +70,9 @@ importers:
       pg:
         specifier: ^8.20.0
         version: 8.20.0
+      svix:
+        specifier: ^1.92.2
+        version: 1.92.2
       zod:
         specifier: ^4.3.6
         version: 4.3.6
@@ -6841,6 +6844,12 @@ packages:
       }
     engines: { node: '>=8' }
 
+  svix@1.92.2:
+    resolution:
+      {
+        integrity: sha512-ZmuA3UVvlnF9EgxlzmPtF7CKjQb64Z6OFlyfdDfU0sdcC7dJa+3aOYX5B9mA+RS6ch1AxBa4UP/l6KmqfGtWBQ==,
+      }
+
   tagged-tag@1.0.0:
     resolution:
       {
@@ -11796,6 +11805,10 @@ snapshots:
   supports-color@7.2.0:
     dependencies:
       has-flag: 4.0.0
+
+  svix@1.92.2:
+    dependencies:
+      standardwebhooks: 1.0.0
 
   tagged-tag@1.0.0: {}
 

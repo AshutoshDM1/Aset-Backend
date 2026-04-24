@@ -18,20 +18,19 @@ model User {
   name  String?
   folders Folder[]
   files   File[]
-  UserStorage UserStorage? @relation(fields: [id], references: [userId])
+  storage UserStorage?
 }
 
 model UserStorage {
   id        Int      @id @default(autoincrement())
-  userId    String
-  relatedTo User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  totalStorage     Float    @default(10)
+  userId    String   @unique
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  totalStorage     Float    @default(0) // 10 GB
   usedStorage      Float    @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([userId])
-  @@unique([userId])
 }
 
 model Folder {
