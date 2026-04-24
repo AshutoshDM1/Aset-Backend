@@ -21,6 +21,31 @@ type FolderContentsProps = {
   onRefetch?: () => void;
 };
 
+function OtherFileTile({ name }: { name: string }) {
+  const dot = name.lastIndexOf('.');
+  const base = dot > 0 ? name.slice(0, dot) : name;
+  const ext = dot > 0 ? name.slice(dot) : '';
+
+  return (
+    <a
+      aria-label={name}
+      title={name}
+      className="group flex flex-col items-center rounded-2xl p-2 transition-transform duration-200 hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    >
+      <div className="flex size-20 items-center justify-center overflow-hidden rounded-2xl bg-muted/40 ring-1 ring-border/60">
+        <FileIcon className="size-8 text-muted-foreground" aria-hidden />
+      </div>
+      <p className="text-sm text-foreground">
+        <span className="truncate  inline-block align-bottom">
+          {base.slice(0, 5)}
+          {base.length > 5 ? '..' : ''}
+        </span>
+        {ext}
+      </p>
+    </a>
+  );
+}
+
 export function FolderContents({ folders, files }: FolderContentsProps) {
   const imageFiles = files.filter((f) => isImageFileName(f.name));
   const otherFiles = files.filter((f) => !isImageFileName(f.name));
@@ -34,47 +59,26 @@ export function FolderContents({ folders, files }: FolderContentsProps) {
   }
 
   return (
-    <>
-      {folders.length > 0 || imageFiles.length > 0 ? (
-        <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-10">
-          {folders.map((item, index) => (
-            <li key={`f-${item.id}`}>
-              <FolderComponent
-                folderId={item.id}
-                folderName={item.name}
-                color={COLOR_CYCLE[index % COLOR_CYCLE.length]}
-              />
-            </li>
-          ))}
-          {imageFiles.map((item) => (
-            <li
-              key={`file-${item.id}`}
-              className="flex items-start justify-center"
-            >
-              <ImageFilePreview name={item.name} url={item.url} />
-            </li>
-          ))}
-        </ul>
-      ) : null}
-      {otherFiles.length > 0 ? (
-        <ul
-          className={`flex flex-col gap-2 ${folders.length > 0 || imageFiles.length > 0 ? 'mt-6' : ''}`}
-        >
-          {otherFiles.map((item) => (
-            <li key={`file-${item.id}`}>
-              <div className="flex w-full items-center gap-3 rounded-lg border border-border bg-card px-4 py-3 text-left">
-                <FileIcon
-                  className="size-5 shrink-0 text-muted-foreground"
-                  aria-hidden
-                />
-                <span className="min-w-0 truncate font-medium">
-                  {item.name}
-                </span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-    </>
+    <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-10">
+      {folders.map((item, index) => (
+        <li key={`f-${item.id}`}>
+          <FolderComponent
+            folderId={item.id}
+            folderName={item.name}
+            color={COLOR_CYCLE[index % COLOR_CYCLE.length]}
+          />
+        </li>
+      ))}
+      {imageFiles.map((item) => (
+        <li key={`file-${item.id}`} className="flex items-start justify-center">
+          <ImageFilePreview name={item.name} url={item.url} />
+        </li>
+      ))}
+      {otherFiles.map((item) => (
+        <li key={`file-${item.id}`} className="flex items-start justify-center">
+          <OtherFileTile name={item.name} />
+        </li>
+      ))}
+    </ul>
   );
 }

@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import { Webhook } from 'svix';
 import { db } from '../utils/db';
 
-const DEFAULT_TOTAL_STORAGE = 10 * 1024 * 1024 * 1024;
+const DEFAULT_TOTAL_STORAGE_MB = 10 * 1024;
 
 type ClerkEmailAddress = { id: string; email_address: string };
 
@@ -83,7 +83,7 @@ export async function clerkWebhookHandler(req: Request, res: Response) {
             name: fullName(data),
             storage: {
               create: {
-                totalStorage: DEFAULT_TOTAL_STORAGE,
+                totalStorage: DEFAULT_TOTAL_STORAGE_MB,
                 usedStorage: 0,
               },
             },

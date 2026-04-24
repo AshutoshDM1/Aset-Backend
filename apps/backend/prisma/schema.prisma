@@ -25,8 +25,8 @@ model UserStorage {
   id        Int      @id @default(autoincrement())
   userId    String   @unique
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  totalStorage     Float    @default(0) // 10 GB
-  usedStorage      Float    @default(0)
+  totalStorage     Float    @default(0) // stored in MB
+  usedStorage      Float    @default(0) // stored in MB
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -55,6 +55,7 @@ model File {
   id        Int      @id @default(autoincrement())
   name      String
   s3Url     String
+  sizeMb    Float    @default(0) // size in MB
   createdAt DateTime @default(now())
 
   ownerId String

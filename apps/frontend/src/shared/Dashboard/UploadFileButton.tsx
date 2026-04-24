@@ -25,10 +25,13 @@ export function UploadFileButton({
     toast.loading('Uploading file...');
     setBusy(true);
     try {
+      const sizeMb = picked.size / (1024 * 1024);
+
       const signed = await presign.mutateAsync({
         folderId,
         fileName: picked.name,
         contentType: picked.type || undefined,
+        sizeMb,
       });
 
       const put = await fetch(signed.uploadUrl, {
@@ -47,12 +50,14 @@ export function UploadFileButton({
         name: picked.name,
         folderId,
         objectKey: signed.objectKey,
+        sizeMb,
       });
 
       toast.success('File uploaded');
       void queryClient.invalidateQueries(
         trpc.file.listByFolder.queryFilter({ folderId }),
       );
+      void queryClient.invalidateQueries(trpc.user.me.queryFilter());
     } catch (err) {
       const message =
         err instanceof Error ? err.message : 'Could not upload file';

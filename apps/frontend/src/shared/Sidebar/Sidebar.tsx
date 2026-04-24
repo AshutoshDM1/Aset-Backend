@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -9,6 +10,7 @@ import {
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 import Logo from '@/shared/Navbar/Logo';
+import { trpc } from '@/utils/trpc';
 import { Clock3, Folder, Home, Plus, Star, Trash2, Users } from 'lucide-react';
 import * as React from 'react';
 import { Link, NavLink, useLocation } from 'react-router';
@@ -55,10 +57,20 @@ function SidebarNavItem({ item }: { item: SidebarItem }) {
   );
 }
 
+const MB_PER_GB = 1024;
+
+function mbToGb(valueMb: number) {
+  return (valueMb / MB_PER_GB).toFixed(2);
+}
+
 function SidebarStorageCard() {
-  const usedGB = 41.2;
-  const totalGB = 50;
-  const percent = Math.round((usedGB / totalGB) * 100);
+  const { data, isPending } = useQuery(trpc.user.me.queryOptions());
+
+  const storage = data?.storage;
+  const totalMb = storage?.totalStorage ?? 0;
+  const usedMb = storage?.usedStorage ?? 0;
+  const percent =
+    totalMb > 0 ? Math.min(100, Math.round((usedMb / totalMb) * 100)) : 0;
 
   return (
     <Card size="sm" className="bg-card/60">
@@ -67,17 +79,28 @@ function SidebarStorageCard() {
           <Home aria-hidden className="size-4 text-primary" />
           Storage
           <span className="ml-auto text-xs font-normal text-muted-foreground">
-            {percent}%
+            {isPending ? '—' : `${percent}%`}
           </span>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         <Progress value={percent} />
         <p className="text-xs text-muted-foreground">
-          You&apos;ve used{' '}
-          <span className="font-medium text-foreground">{usedGB} GB</span> of{' '}
-          <span className="font-medium text-foreground">{totalGB} GB</span>{' '}
-          total storage.
+          {isPending ? (
+            'Loading storage…'
+          ) : (
+            <>
+              You&apos;ve used{' '}
+              <span className="font-medium text-foreground">
+                {mbToGb(usedMb)} GB
+              </span>{' '}
+              of{' '}
+              <span className="font-medium text-foreground">
+                {mbToGb(totalMb)} GB
+              </span>{' '}
+              total storage.
+            </>
+          )}
         </p>
       </CardContent>
       <CardFooter className="pt-0">
@@ -125,21 +148,20 @@ export function SidebarFolderList({
   );
 }
 
+const FOLDER_COLORS = [
+  'bg-blue-500',
+  'bg-green-500',
+  'bg-pink-500',
+  'bg-amber-500',
+  'bg-purple-500',
+  'bg-rose-500',
+  'bg-cyan-500',
+];
+
 export default function Sidebar({ className }: { className?: string }) {
-  const content = [
-    {
-      label: 'Work',
-      href: '/dashboard/work',
-      color: 'bg-blue-500',
-      icon: Folder,
-    },
-    {
-      label: 'Personal',
-      color: 'bg-green-500',
-      href: '/dashboard/personal',
-      icon: Folder,
-    },
-  ];
+  const { data: folders, isPending: foldersPending } = useQuery(
+    trpc.folder.list.queryOptions({ parentId: null }),
+  );
   return (
     <aside
       className={cn(
@@ -169,15 +191,23 @@ export default function Sidebar({ className }: { className?: string }) {
           <h3 className="text-sm font-medium text-muted-foreground px-4">
             Folders
           </h3>
-          {content.map((item) => (
-            <SidebarFolderList
-              key={item.href}
-              label={item.label}
-              href={item.href}
-              color={item.color}
-              icon={item.icon}
-            />
-          ))}
+          {foldersPending ? (
+            <p className="px-7 py-1 text-xs text-muted-foreground">Loading…</p>
+          ) : folders && folders.length > 0 ? (
+            folders.map((item, index) => (
+              <SidebarFolderList
+                key={item.id}
+                label={item.name}
+                href={`/dashboard/my-files/${item.id}`}
+                color={FOLDER_COLORS[index % FOLDER_COLORS.length]}
+                icon={Folder}
+              />
+            ))
+          ) : (
+            <p className="px-7 py-1 text-xs text-muted-foreground">
+              No folders yet
+            </p>
+          )}
         </div>
       </div>
 

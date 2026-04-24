@@ -41,6 +41,7 @@ export const fileRouter = router({
         folderId: z.number().int().positive(),
         fileName: z.string().min(1).max(500),
         contentType: z.string().max(200).optional(),
+        sizeMb: z.number().nonnegative(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -51,6 +52,22 @@ export const fileRouter = router({
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: 'Folder not found',
+        });
+      }
+      const storage = await ctx.db.userStorage.findUnique({
+        where: { userId: ctx.auth.userId },
+        select: { totalStorage: true, usedStorage: true },
+      });
+      if (!storage) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'User storage not provisioned',
+        });
+      }
+      if (storage.usedStorage + input.sizeMb > storage.totalStorage) {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Not enough storage available',
         });
       }
       const contentType =
@@ -83,6 +100,7 @@ export const fileRouter = router({
         name: z.string().min(1).max(500),
         folderId: z.number().int().positive(),
         objectKey: z.string().min(1).max(2000),
+        sizeMb: z.number().nonnegative(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -103,15 +121,22 @@ export const fileRouter = router({
         });
       }
       const s3Url = storageUrlForKey(input.objectKey);
-      const file = await ctx.db.file.create({
-        data: {
-          name: input.name,
-          s3Url,
-          ownerId: ctx.auth.userId,
-          folderId: input.folderId,
-        },
-        select: { id: true, name: true, s3Url: true },
-      });
+      const [file] = await ctx.db.$transaction([
+        ctx.db.file.create({
+          data: {
+            name: input.name,
+            s3Url,
+            sizeMb: input.sizeMb,
+            ownerId: ctx.auth.userId,
+            folderId: input.folderId,
+          },
+          select: { id: true, name: true, s3Url: true },
+        }),
+        ctx.db.userStorage.update({
+          where: { userId: ctx.auth.userId },
+          data: { usedStorage: { increment: input.sizeMb } },
+        }),
+      ]);
       return {
         id: file.id,
         name: file.name,
