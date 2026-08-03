@@ -9,3 +9,7 @@ docker compose --profile redis --profile redis down
 # Start Backend API
 docker compose --profile backend up -d
 docker compose --profile backend down
+
+# Start Optix Microservice
+docker compose --profile optix up -d
+docker compose --profile optix down

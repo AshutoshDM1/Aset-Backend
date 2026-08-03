@@ -3,9 +3,10 @@ node_modules/*
 dist
 .env
 .env.local
+.env.prod
 .env.development.local
 .env.test.local
 .env.production.local
 .vercel
 tmp
-server.exe
+server.exe  

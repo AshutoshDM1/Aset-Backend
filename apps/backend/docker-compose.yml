@@ -67,6 +67,27 @@ services:
       postgres:
         condition: service_healthy
 
+  optix:
+    build:
+      context: ../..
+      dockerfile: apps/optix/Dockerfile
+    image: aset-optix:local
+    container_name: aset_optix
+    restart: unless-stopped
+    profiles:
+      - optix
+    env_file:
+      - ../optix/.env
+    environment:
+      PORT: ${OPTIX_PORT:-5001}
+      REDIS_URL: redis://:${REDIS_PASSWORD:-redis_local_pwd}@redis:6379
+      BACKEND_URL: http://api:5000
+    ports:
+      - '${OPTIX_PORT:-5001}:5001'
+    depends_on:
+      redis:
+        condition: service_healthy
+
 volumes:
   aset_postgres_data:
     driver: local
