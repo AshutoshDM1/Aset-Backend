@@ -43,7 +43,9 @@ jobs:
 
             # Fetch latest changes
             echo "📥 Fetching latest code from GitHub..."
+            git reset --hard HEAD
             git pull origin main
+
 
             # Install dependencies
             echo "📦 Installing workspace dependencies..."
